@@ -6,118 +6,117 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/main.css">
-  <title>Vue从入门到熟悉</title>
+  <title>Vue从入门到熟悉第二讲Vue基础知识和常用指令</title>
 </head>
 <body>
   <div id="app" class="container" v-cloak>
-    <h1>Vue从入门到熟悉</h1>
+    <h1>Vue基础知识和常用指令</h1>
     <div class="row">
-      <div class="col-md-8">
-        <div class="col-md-12" v-for="book in books">
-          <div class="col-md-4">
-            <img class="book-img" v-bind:src="book.img" v-bind:alt="book.title" />
-          </div>
-          <div class="col-md-8">
-            <h2>{{ book.title }}</h2>
-            <p><label>作者：</label>{{ book.author }}</p>
-            <p><label>出版社：</label>{{ book.press }}</p>
-            <p><label>价格：</label>{{ book.price }}</p>
-            <p><label>ISBN：</label>{{ book.isbn }}</p>
-            <p><label>评分：</label>{{ book.rating  }}</p>
-            <p><button class="btn btn-sm btn-primary" v-on:click="addToCart(book)">加入购物车</button></p>
-          </div>
+      <span v-bind:class="className">{{ number }},{{ reverseMessage }}</span>
+      <button v-on:click="click">Click me</button>
+    </div>
+    <div class="row">
+      <h2>计算属性 VS 方法</h2>
+      <p>this is method: {{ reverse() }}</p>
+      <p>this is method: {{ reverse() }}</p>
+      <p>this is method: {{ reverse() }}</p>
+      
+      <p>this is computed: {{ reverseMessage }}</p>
+      <p>this is computed: {{ reverseMessage }}</p>
+      <p>this is computed: {{ reverseMessage }}</p>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>条件判断</h2>
+        <div v-if="isLogin">
+          欢迎,<button>注销</button>
+        </div>
+        <div v-else>
+          <button>登录</button>
         </div>
       </div>
-      <div class="col-md-4" v-if="carts.length > 0">
-        <div v-for="cart in carts">
-          <h4>{{ cart.title }}</h4>
-          <p>
-            <label>{{ cart.price }} * {{ cart.num }}</label>
-            <span class="btn btn-sm btn-default" v-on:click="inc(cart)">+</span>
-            <span class="btn btn-sm btn-default" v-on:click="dec(cart)">-</span>
-          </p>
-        </div>
-        <div>总计：{{ total }}</div>
+
+      <div class="col-sm-6">
+        <h2>列表循环<button @click="addMember">Add a member</button></h2>
+        <ul>
+          <li v-for="(member, index) in members">
+            {{index}} name:{{ member.name }},age: {{ member.age }}
+            <button v-on:click="member.age++">Add age</button>
+            <button v-on:click.ctrl="editMember(index, $event)">edit</button>
+          </li>
+        </ul>
       </div>
-      <div class="col-md-4" v-else>购物为空</div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>V-model</h2>
+        <p>Input name {{ name }}</p>
+        <p><input type="text" v-model="name" /></p>
+
+        <p>sex {{ sex }}</p>
+        <p><select v-model="sex">
+          <option value="男">男</option>
+          <option value="女">女</option>
+        </select></p>
+      </div>
     </div>
   </div>
 </body>
-<script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+<script src="./node_modules/vue/dist/vue.js"></script>
 <script>
 let vm = new Vue({
   el: '#app',
   data: {
-    message: 'Hello world',
-    books: [],
-    carts: []
+    message: 'Hello Vue',
+    name: 'Jackie',
+    className: 'text-green',
+    number: 1,
+    isLogin: true,
+    sex: '女',
+    members: []
+  },
+  created: function() {
+    //通过ajax的方式从后台获取数据，成功后我们根据数据
+    this.members = [
+      {name: '张三', age: '18'},
+      {name: '李斯', age: '21'},
+      {name: '王五', age: '19'},
+      {name: '赵六', age: '20'},
+    ]
+  },
+  watch: {
+    number: function(val, oldVal) {
+      console.log(val)
+      console.log(oldVal)
+    }
   },
   methods: {
-    addToCart(book) {
-      let exists = false
-      let cartIndex = null
-      this.carts.find(function(cart, index) {
-        if(cart.id === book.id) {
-          exists = true
-          cartIndex = index
-        }
-      })
-      if(exists) {
-        let cart = this.carts[cartIndex]
-        this.inc(cart)
-        return 
-      }
-      book.num = 1
-      this.carts.push(book)
+    addMember: function(event) {
+      console.log(event.target)
+      console.log(this.members.length)
+      // this.members[this.members.length+1] =  {name: '张三modify', age: '20'}
+      this.members.push({name: '张三modify', age: '20'})
     },
-    inc(cart) {
-      let index = this.carts.indexOf(cart)
-      cart.num += 1
-      this.carts.splice(index, 1, cart)
+    editMember: function(index, event) {
+      console.log(event.target)
+      // this.members[index] = {name: '张三modify', age: '20'}
+      this.members.splice(index, 1, {name: '张三modify', age: '20'})
     },
-    dec(cart) {
-      let index = this.carts.indexOf(cart)
-      if(cart.num === 1) {
-        this.carts.splice(index, 1)
-        return 
-      }
-      cart.num -= 1
-      this.carts.splice(index, 1, cart)
+    click: function() {
+      this.number += 1
+      console.log('click me')
+    },
+    reverse: function() {
+      console.log('reverse method has been trigged')
+      return this.message.split('').reverse().join('')
     }
   },
   computed: {
-    total: function() {
-      let total = 0
-      this.carts.forEach(function(cart) {
-        total += cart.price * cart.num
-      })
-      return total.toFixed(2)
+    reverseMessage: function() {
+      console.log('computed')
+      return this.message.split('').reverse().join('')
     }
-  },
-  created: function() {
-    //通过Ajax的方式获取到数据
-    this.books = [
-      {
-        id: '26835090',
-        title: '软技能',
-        img: 'https://img3.doubanio.com/view/subject/l/public/s28889106.jpg',
-        author: 'John Sonmez ',
-        press: '人民邮电出版社',
-        price: '59.00',
-        isbn: '9787115429476',
-        rating: '8.0'
-      },
-      {
-        id: '1033778',
-        title: '富爸爸，穷爸爸',
-        img: 'https://img3.doubanio.com/view/subject/l/public/s1429010.jpg',
-        author: '（美）罗伯特・T・清崎 ',
-        press: ' 世界图书出版公司',
-        price: '18.80',
-        isbn: '9787506246743',
-        rating: '8.2'
-      }
-    ]
   }
 })
 </script>
