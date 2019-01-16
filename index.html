@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue从入门到熟悉——组件</title>
+</head>
+<body>
+  <div id="app">
+    {{ message }}
+    <div>
+      <page-info :current-page=currentPage></page-info>
+      <page-button v-for="i in 5" :page=i @change-current-page="changeCurrentPage">{{ i }}</page-button>
+    </div>
+  </div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script>
+  Vue.component('page-button', {
+    props: ['page'],
+    template: '<button @click="changePage(page)"><slot></slot></button>',
+    methods: {
+      changePage: function() {
+        this.$emit('change-current-page', this.page)
+      }
+    }
+  })
+
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      message: 'Hello Vue',
+      currentPage: 1
+    },
+    methods: {
+      changeCurrentPage: function(page) {
+        this.currentPage = page
+      }
+    },
+    components: {
+      'page-info': {
+        props: ['currentPage'],
+        template: '<span>当前第{{ currentPage }}页</span>'
+      }
+    }
+  })
+</script>
+</html>

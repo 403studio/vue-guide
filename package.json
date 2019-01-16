@@ -1,0 +1,23 @@
+{
+  "name": "vue-guide",
+  "version": "1.0.0",
+  "description": "Vue从入门到熟练",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/403studio/vue-guide.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/403studio/vue-guide/issues"
+  },
+  "homepage": "https://github.com/403studio/vue-guide#readme",
+  "dependencies": {
+    "vue": "^2.5.22"
+  }
+}
