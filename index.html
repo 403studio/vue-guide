@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="row">
+      <table class="table table-borded">
+        <thead>
+          <tr>
+            <th v-for="item in tableHeaderData"  v-if="item.isShown" >{{ item.name }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in tableData">
+            <td v-for="field in tableHeaderData" v-if="field.isShown">{{ item[field.fieldname] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script>
+var vm = new Vue({
+  el: '#app',
+  data: {
+    message: 'hello world',
+    tableHeaderData: [],
+    tableData: []
+  },
+  created: function() {
+    //发起一个Ajax请求获取到数据表格列信息
+    this.tableHeaderData = [
+      {name: '姓名', fieldname: 'name', isShown: true},
+      {name: '性别', fieldname: 'sex', isShown: true},
+      {name: '出生日期', fieldname: 'birthday', isShown: true},
+      {name: '地址', fieldname: 'address', isShown: true},
+      {name: '手机号码', fieldname: 'mobilephone', isShown: false}
+    ]
+    //发起一个Ajax的请求到后台获取数据
+    this.tableData = [
+      {name: "张三", sex: '男', birthday: '1986-10-23', address: '湖南省长沙市雨花区', mobilephone: '13658584444'},
+      {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'},
+      {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'},
+      {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'},
+      {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'},
+      {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'}
+    ]
+  }
+})
+</script>
+</html>

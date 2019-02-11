@@ -1,0 +1,25 @@
+{
+  "name": "vue-guide",
+  "version": "1.0.0",
+  "description": "Vue从入门到熟练项目实战——自定义表格",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "vue": "^2.6.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/403studio/vue-guide.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/403studio/vue-guide/issues"
+  },
+  "homepage": "https://github.com/403studio/vue-guide#readme"
+}
