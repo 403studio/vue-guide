@@ -39,6 +39,13 @@
           </tr>
         </tbody>
       </table>
+      <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <button-nav v-for="item in pageInfo.totalPage" v-bind:page="item" v-bind:current-page="pageInfo.currentPage" v-on:change="pageChange"></button-nav>
+            </ul>
+          </nav>
+      </div>
       <!-- 自定义表格弹出框 -->
       <div class="modal fade" id="custom-table-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -110,17 +117,40 @@
 <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="./node_modules/vue/dist/vue.js"></script>
 <script>
+Vue.component('button-nav', {
+  template: `<li v-bind:class="{'page-item': true, 'active': currentPage==page}"><button v-on:click="changePage(page)" class="page-link" href="#">{{ page }}</button></li>`,
+  props: ['page', 'currentPage'],
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    changePage: function(page) {
+      console.log('console from component')
+      console.log(page)
+      this.$emit('change', page)
+    }
+  }
+}
+)
 var vm = new Vue({
   el: '#app',
   data: {
     message: 'hello world',
     tableHeaderData: [],
-    tableData: []
+    tableData: [],
+    pageInfo: {}
   },
   methods: {
     changeTableHeader: function() {
       console.log(this.tableHeaderData)
       //将最新的数据通过ajax的方式调用后台接口实现数据保存
+    },
+    pageChange: function(page) {
+      console.log('console from parent')
+      console.log(page)
+      //将分页的信息还有搜索的信息通过ajax的方式发送到后台获取数据
     }
   },
   created: function() {
@@ -141,6 +171,11 @@ var vm = new Vue({
       {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'},
       {name: "李四", sex: '男', birthday: '1996-10-23', address: '湖南省长沙市芙蓉区', mobilephone: '13658584444'}
     ]
+    this.pageInfo =  {
+      currentPage: 2,
+      totalPage: 5,
+      pageSize: 5
+    }
   }
 })
 </script>
